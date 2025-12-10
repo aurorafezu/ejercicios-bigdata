@@ -662,14 +662,21 @@ upstream  https://github.com/TodoEconometria/ejercicios-bigdata.git (profesor)
 
 #### Instrucciones Super Simples
 
-**1. Abrir el ejercicio en tu editor:**
+**1. Abrir el proyecto en tu IDE:**
 
 ```bash
-# Si usas Visual Studio Code
-code .
+# Opción A: PyCharm (Recomendado para el curso)
+# - Abre PyCharm
+# - File → Open...
+# - Selecciona la carpeta: ejercicios-bigdata/
 
-# Si usas otro editor, ábrelo manualmente
-# y busca la carpeta ejercicios-bigdata/
+# Opción B: Visual Studio Code
+# - Abre la terminal en la carpeta ejercicios-bigdata/
+# - Escribe: code .
+
+# Opción C: Otro editor
+# - Abre tu editor favorito
+# - Busca y abre la carpeta: ejercicios-bigdata/
 ```
 
 **2. Ir a la carpeta del ejercicio:**
