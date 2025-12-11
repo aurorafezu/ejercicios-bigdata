@@ -725,7 +725,65 @@ git push origin main
 
 ### PASO 4: Actualizar Cuando el Profesor Agregue Ejercicios Nuevos
 
-El profesor va a agregar nuevos ejercicios. Para obtenerlos:
+#### ¿Por Qué Necesito Actualizar?
+
+Cuando hiciste el fork, obtuviste una **copia en ese momento**. Pero el profesor seguirá agregando ejercicios nuevos durante el curso. Tu fork **NO se actualiza automáticamente**.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│        ¿QUÉ PASA CUANDO EL PROFESOR AGREGA EJERCICIOS?      │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  SEMANA 1 - Hiciste tu Fork                                 │
+│  ┌────────────────────────────┐                             │
+│  │ Repo Profesor               │                             │
+│  │ ├── ejercicio_01/           │                             │
+│  │ └── ejercicio_02/           │                             │
+│  └────────────────────────────┘                             │
+│              │ Fork                                          │
+│              ↓                                               │
+│  ┌────────────────────────────┐                             │
+│  │ Tu Fork                     │                             │
+│  │ ├── ejercicio_01/           │                             │
+│  │ └── ejercicio_02/           │ ✅ Sincronizados            │
+│  └────────────────────────────┘                             │
+│                                                              │
+│  ═══════════════════════════════════════════════════════    │
+│                                                              │
+│  SEMANA 3 - Profesor agregó ejercicios 03, 04, 05          │
+│  ┌────────────────────────────┐                             │
+│  │ Repo Profesor               │                             │
+│  │ ├── ejercicio_01/           │                             │
+│  │ ├── ejercicio_02/           │                             │
+│  │ ├── ejercicio_03/ ← NUEVO   │                             │
+│  │ ├── ejercicio_04/ ← NUEVO   │                             │
+│  │ └── ejercicio_05/ ← NUEVO   │                             │
+│  └────────────────────────────┘                             │
+│                                                              │
+│  ┌────────────────────────────┐                             │
+│  │ Tu Fork                     │                             │
+│  │ ├── ejercicio_01/           │                             │
+│  │ └── ejercicio_02/           │ ❌ Desactualizado!          │
+│  │                             │    (te faltan 03, 04, 05)   │
+│  └────────────────────────────┘                             │
+│                                                              │
+│  ⚠️ Tu fork NO se actualiza solo, debes sincronizarlo!      │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Método 1: Desde la Terminal (Recomendado)
+
+Este es el método más común y que ya configuraste cuando clonaste el repo.
+
+**¿Recuerdas este comando?**
+```bash
+git remote add upstream https://github.com/TodoEconometria/ejercicios-bigdata.git
+```
+
+Eso configuró la conexión con el repo original del profesor. Ahora puedes sincronizar:
 
 ```bash
 # 1. Descargar cambios del profesor
@@ -739,7 +797,320 @@ git merge upstream/main
 git push origin main
 ```
 
+**¿Qué hace cada comando?**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              FLUJO DE SINCRONIZACIÓN DETALLADO              │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  COMANDO 1: git fetch upstream                              │
+│  ════════════════════════════                               │
+│                                                              │
+│  ┌──────────────────────┐                                   │
+│  │ Repo Profesor         │                                   │
+│  │ (upstream)            │                                   │
+│  └──────────────────────┘                                   │
+│            │                                                 │
+│            │ fetch (descargar)                               │
+│            │ "Dame los ejercicios nuevos"                    │
+│            ↓                                                 │
+│  ┌──────────────────────┐                                   │
+│  │ Tu PC (local)         │                                   │
+│  │ Git guarda los        │                                   │
+│  │ cambios pero NO los   │                                   │
+│  │ aplica todavía        │                                   │
+│  └──────────────────────┘                                   │
+│                                                              │
+│  ═══════════════════════════════════════════════════════    │
+│                                                              │
+│  COMANDO 2: git merge upstream/main                         │
+│  ═══════════════════════════════════                        │
+│                                                              │
+│  ┌──────────────────────┐                                   │
+│  │ Tu código actual      │                                   │
+│  │ ├── ejercicio_01/     │                                   │
+│  │ └── ejercicio_02/     │                                   │
+│  └──────────────────────┘                                   │
+│            │                                                 │
+│            │ merge (fusionar)                                │
+│            │ "Combina mi código con lo nuevo del profesor"   │
+│            ↓                                                 │
+│  ┌──────────────────────┐                                   │
+│  │ Código actualizado    │                                   │
+│  │ ├── ejercicio_01/     │                                   │
+│  │ ├── ejercicio_02/     │                                   │
+│  │ ├── ejercicio_03/ ✨  │                                   │
+│  │ ├── ejercicio_04/ ✨  │                                   │
+│  │ └── ejercicio_05/ ✨  │                                   │
+│  └──────────────────────┘                                   │
+│                                                              │
+│  ═══════════════════════════════════════════════════════    │
+│                                                              │
+│  COMANDO 3: git push origin main                            │
+│  ════════════════════════════════                           │
+│                                                              │
+│  ┌──────────────────────┐                                   │
+│  │ Tu PC                 │                                   │
+│  │ (ya con ejercicios    │                                   │
+│  │  nuevos)              │                                   │
+│  └──────────────────────┘                                   │
+│            │                                                 │
+│            │ push (subir)                                    │
+│            │ "Actualiza mi fork en GitHub"                   │
+│            ↓                                                 │
+│  ┌──────────────────────┐                                   │
+│  │ Tu Fork en GitHub     │                                   │
+│  │ ├── ejercicio_01/     │                                   │
+│  │ ├── ejercicio_02/     │                                   │
+│  │ ├── ejercicio_03/ ✅  │                                   │
+│  │ ├── ejercicio_04/ ✅  │                                   │
+│  │ └── ejercicio_05/ ✅  │                                   │
+│  └──────────────────────┘                                   │
+│                                                              │
+│  ✅ AHORA TIENES LOS EJERCICIOS NUEVOS EN TODAS PARTES!     │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Método 2: Desde GitHub Web (Más Fácil)
+
+Si no te sientes cómodo con la terminal, GitHub ofrece un botón para sincronizar.
+
+**Paso a Paso:**
+
+**1. Ir a tu fork en GitHub:**
+```
+https://github.com/TU_USUARIO/ejercicios-bigdata
+```
+
+**2. Buscar el mensaje de sincronización:**
+
+Cuando hay cambios nuevos, verás un banner:
+
+```
+┌────────────────────────────────────────────────────┐
+│  ⚠️ This branch is 15 commits behind                │
+│     TodoEconometria:main                            │
+│                                                     │
+│     [Sync fork ▼]  ← CLICK AQUÍ                    │
+└────────────────────────────────────────────────────┘
+```
+
+**3. Click en "Sync fork" → "Update branch"**
+
+```
+┌────────────────────────────────────────────────────┐
+│  Sync fork                                          │
+│  ┌────────────────────────────────────────────┐   │
+│  │ This will update your branch with the      │   │
+│  │ latest changes from TodoEconometria:main   │   │
+│  │                                             │   │
+│  │  [Update branch] ← CLICK AQUÍ              │   │
+│  │  [Discard commits]                          │   │
+│  └────────────────────────────────────────────┘   │
+└────────────────────────────────────────────────────┘
+```
+
+**4. Esperar unos segundos...**
+
+GitHub sincronizará automáticamente.
+
+**5. Actualizar tu copia local:**
+
+Ahora tu fork en GitHub está actualizado, pero tu PC no. Ejecuta:
+
+```bash
+git pull origin main
+```
+
+✅ **¡Listo!** Tienes los ejercicios nuevos.
+
+---
+
+#### ⚠️ ¿Qué Pasa Si Hay Conflictos?
+
+**Escenario:** Modificaste un archivo que el profesor también actualizó.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    CONFLICTO DE MERGE                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Tu versión (en tu fork):                                   │
+│  ┌──────────────────────────────────────┐                  │
+│  │ ejercicio_01.py (línea 10)           │                  │
+│  │ resultado = calcular_promedio(df)    │                  │
+│  └──────────────────────────────────────┘                  │
+│                                                              │
+│  Versión del profesor (upstream):                           │
+│  ┌──────────────────────────────────────┐                  │
+│  │ ejercicio_01.py (línea 10)           │                  │
+│  │ resultado = calcular_mediana(df)     │                  │
+│  └──────────────────────────────────────┘                  │
+│                                                              │
+│  Git no sabe cuál versión mantener ❌                       │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Solución:**
+
+Cuando haces `git merge upstream/main` y hay conflictos, verás:
+
+```bash
+Auto-merging ejercicio_01.py
+CONFLICT (content): Merge conflict in ejercicio_01.py
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+**Pasos para resolverlo:**
+
+**1. Abre el archivo con conflicto:**
+
+```python
+# ejercicio_01.py
+
+<<<<<<< HEAD
+resultado = calcular_promedio(df)  # Tu versión
+=======
+resultado = calcular_mediana(df)   # Versión del profesor
+>>>>>>> upstream/main
+```
+
+**2. Decide qué versión mantener:**
+
+```python
+# Opción A: Mantener la del profesor (recomendado si no habías empezado)
+resultado = calcular_mediana(df)
+
+# Opción B: Mantener la tuya (si ya tenías trabajo avanzado)
+resultado = calcular_promedio(df)
+
+# Opción C: Combinar ambas (si tiene sentido)
+resultado_promedio = calcular_promedio(df)
+resultado_mediana = calcular_mediana(df)
+```
+
+**3. Borrar las marcas de conflicto:**
+
+Elimina estas líneas:
+```
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/main
+```
+
+**4. Guardar, hacer commit y push:**
+
+```bash
+git add ejercicio_01.py
+git commit -m "Resolver conflicto de merge en ejercicio_01.py"
+git push origin main
+```
+
+---
+
+#### 🎯 Buenas Prácticas de Sincronización
+
+**1. Sincroniza ANTES de empezar un ejercicio nuevo:**
+
+```bash
+# ✅ BIEN - Sincronizar primero
+git fetch upstream && git merge upstream/main
+# Ahora empieza a trabajar
+
+# ❌ MAL - Trabajar con código viejo
+# Empiezas sin actualizar, luego tienes conflictos
+```
+
+**2. Haz un commit de tu trabajo ANTES de sincronizar:**
+
+```bash
+# ✅ BIEN - Guarda tu trabajo primero
+git add .
+git commit -m "Avance en ejercicio 03"
+git fetch upstream && git merge upstream/main
+
+# ❌ MAL - Sincronizar con cambios sin guardar
+# Puedes perder tu trabajo
+```
+
+**3. Frecuencia recomendada:**
+
+```
+┌────────────────────────────────────────┐
+│  📅 CALENDARIO DE SINCRONIZACIÓN       │
+├────────────────────────────────────────┤
+│                                         │
+│  Lunes: Sincronizar antes de clase     │
+│  └─ git fetch upstream                 │
+│     git merge upstream/main            │
+│                                         │
+│  Durante la semana:                    │
+│  └─ Trabajar normalmente en ejercicios │
+│                                         │
+│  Viernes: Push de tu avance            │
+│  └─ git push origin main               │
+│                                         │
+│  Domingo (opcional):                   │
+│  └─ Verificar si hay actualizaciones   │
+│                                         │
+└────────────────────────────────────────┘
+```
+
 ⚠️ **Haz esto CADA SEMANA** para tener los ejercicios nuevos.
+
+---
+
+#### 🔍 Verificar Estado de Sincronización
+
+**Comando útil para saber si estás desactualizado:**
+
+```bash
+# Ver diferencias entre tu fork y el repo del profesor
+git fetch upstream
+git log HEAD..upstream/main --oneline
+```
+
+**Si ves commits nuevos:**
+```
+a1b2c3d Agregar ejercicio 06
+d4e5f6g Corregir typo en ejercicio 05
+g7h8i9j Agregar datos para ejercicio 06
+```
+
+Significa que tienes 3 commits (ejercicios/actualizaciones) que no tienes.
+
+**Si no ves nada:**
+```
+(vacío)
+```
+
+Significa que estás actualizado. ✅
+
+---
+
+#### 📋 Resumen Rápido
+
+**Método Terminal (completo):**
+```bash
+git fetch upstream              # Descargar cambios del profesor
+git checkout main               # Asegurar que estás en main
+git merge upstream/main         # Fusionar cambios
+git push origin main            # Subir a tu fork en GitHub
+```
+
+**Método GitHub Web (más fácil):**
+1. Ir a tu fork en GitHub
+2. Click "Sync fork" → "Update branch"
+3. En tu PC: `git pull origin main`
+
+**Frecuencia:** Cada semana, preferiblemente los lunes antes de empezar.
+
+**Conflictos:** Si aparecen, edita el archivo manualmente, elimina las marcas `<<<<<<<`, `=======`, `>>>>>>>`, y haz commit.
 
 ---
 
