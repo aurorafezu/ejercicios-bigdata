@@ -20,7 +20,7 @@ Antes de empezar, asegúrate de tener:
 - ✅ Python 3.11+ instalado
 - ✅ Pandas instalado (`pip install pandas`)
 - ✅ PyCharm configurado
-- ✅ Los archivos CSV en `.profesor/.datos/csv_tienda_informatica/`
+- ✅ Los archivos CSV en `~/datos/csv_tienda_informatica/`
 
 ---
 
