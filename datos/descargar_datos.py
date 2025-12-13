@@ -7,7 +7,7 @@ import shutil
 # El archivo viene comprimido en GZIP (.gz)
 DATA_URL = "https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "ejercicios_bigdata", "datos")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "ejercicios-bigdata", "datos")
 
 def asegurar_directorio(ruta):
     os.makedirs(ruta, exist_ok=True)
