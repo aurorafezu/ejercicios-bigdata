@@ -117,7 +117,7 @@ Este script debe realizar un análisis completo de todos los CSVs y generar esta
 
 4. **Salida:**
    - Imprimir reporte en consola
-   - Guardar resumen en archivo `resumen_eda.txt`
+   - Guardar resumen en archivo `resumen_eda.md` (formato Markdown)
 
 **Estructura esperada del script:**
 
@@ -370,7 +370,7 @@ erDiagram
 Antes de continuar con los modelos A, B y C, debes tener:
 
 - ✅ `eda_exploratorio.py` - Script ejecutable que genera análisis completo
-- ✅ `resumen_eda.txt` - Salida del script con estadísticas
+- ✅ `resumen_eda.md` - Salida del script con estadísticas (formato Markdown)
 - ✅ `ANALISIS_DATOS.md` - Documento con hallazgos, diagramas ER y conclusiones
 
 **⏱️ Tiempo estimado:** 2-3 horas
@@ -472,7 +472,7 @@ Tu carpeta `1.1_introduccion_sqlite/` debe contener:
 ```
 1.1_introduccion_sqlite/
 ├── eda_exploratorio.py          # [FASE 0] Script de análisis exploratorio
-├── resumen_eda.txt              # [FASE 0] Salida del script EDA
+├── resumen_eda.md               # [FASE 0] Salida del script EDA (Markdown)
 ├── ANALISIS_DATOS.md            # [FASE 0] Documento con hallazgos y diagramas ER
 ├── solucion_modelo_a.py         # [PARTE 1] Script Modelo A
 ├── solucion_modelo_b.py         # [PARTE 2] Script Modelo B
@@ -610,7 +610,7 @@ Antes de dar por terminado el ejercicio, verifica:
 
 ### Fase 0: Análisis Exploratorio
 - [ ] `eda_exploratorio.py` ejecuta sin errores
-- [ ] `resumen_eda.txt` se genera correctamente con estadísticas
+- [ ] `resumen_eda.md` se genera correctamente con estadísticas en formato Markdown
 - [ ] `ANALISIS_DATOS.md` está completo con todas las secciones:
   - [ ] Resumen Ejecutivo con estadísticas
   - [ ] Análisis de Estructura (columnas comunes, tabla resumen)
