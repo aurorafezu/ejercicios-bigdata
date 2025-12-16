@@ -15,6 +15,34 @@
 
 ---
 
+> 📚 **NUEVO - Documentación con MkDocs Material**
+>
+> El repositorio ahora tiene documentación profesional en:
+> **https://todoeconometria.github.io/ejercicios-bigdata/**
+>
+> **Estructura:**
+> - `docs/` → Carpeta con toda la documentación (Markdown)
+> - `mkdocs.yml` → Configuración de MkDocs
+> - `README.md` → Landing page simple que redirige a docs
+>
+> **Editar documentación:**
+> 1. Edita archivos en `docs/` (ej: `docs/ejercicios/01-introduccion-sqlite.md`)
+> 2. Prueba local: `mkdocs serve` → http://localhost:8000
+> 3. Commit y push a desarrollo
+> 4. PR a main → GitHub Actions publica automáticamente
+>
+> **Los alumnos ven:**
+> - README simple con links
+> - Documentación completa en GitHub Pages
+> - Sincronizan igual (fork → PR)
+>
+> **¿Docs != Código?** Los alumnos entienden que:
+> - Código de ejercicios → Carpeta `ejercicios/`
+> - Documentación/guías → Sitio web
+> - Al hacer fork, obtienen TODO (código + docs)
+
+---
+
 ## 📋 Resumen del Ejercicio
 
 **Ejercicio 01**: Base de Datos Relacional - Tienda Informática
