@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ titulo }}</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background:#fafafa; }
+    header { padding: 16px 20px; border-bottom: 1px solid #ddd; display:flex; gap:12px; align-items:center; flex-wrap:wrap; background:#fff; position: sticky; top:0; z-index: 10;}
+    header h1 { font-size: 18px; margin: 0; }
+    header a { text-decoration:none; padding:8px 10px; border:1px solid #ddd; border-radius:10px; color:#111; background:#fff; }
+    header a:hover { background:#f5f5f5; }
+    .pill { font-size: 12px; padding: 4px 8px; border-radius: 999px; background:#f0f0f0; color:#333; }
+
+    main { padding: 18px 20px; max-width: 1100px; margin: 0 auto; }
+
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:12px; }
+    .card { border:1px solid #ddd; border-radius:14px; padding:12px; background:#fff; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .card h2 { font-size: 16px; margin: 0 0 10px 0; }
+    .card img { width:100%; height:auto; border-radius:10px; border:1px solid #eee; }
+    .caption { font-size:12px; color:#666; margin-top:8px; }
+
+    .content { line-height: 1.6; background:#fff; border:1px solid #ddd; border-radius:14px; padding:16px; }
+    .content h1, .content h2, .content h3 { margin-top: 22px; }
+    .content code { background:#f3f3f3; padding:2px 4px; border-radius:4px; }
+    .content pre { background:#0b1020; color:#e9eefc; padding:14px; border-radius:12px; overflow:auto; }
+    .content pre code { background:transparent; padding:0; }
+    .content table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    .content th, .content td { border: 1px solid #ddd; padding: 8px; }
+    .content th { background:#f6f6f6; text-align:left; }
+    .content tr:nth-child(even) td { background:#fcfcfc; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>{{ titulo }}</h1>
+    <span class="pill">DB: {{ db_path }}</span>
+    <span class="pill">MD: {{ md_path }}</span>
+
+    <a href="{{ url_for('home') }}">Ver HTML</a>
+    <a href="{{ url_for('raw') }}">Ver Markdown</a>
+    <a href="{{ url_for('regen') }}">Regenerar</a>
+  </header>
+
+  <main>
+    {% if charts and charts|length > 0 %}
+      <div class="card" style="margin-bottom:14px;">
+        <h2>Gráficos</h2>
+        <div class="grid">
+          {% for titulo_graf, path in charts.items() %}
+            <div class="card">
+              <img src="{{ url_for('static', filename=path) }}" alt="{{ titulo_graf }}">
+              <div class="caption">{{ titulo_graf }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="content">
+      {{ reporte_html|safe }}
+    </div>
+  </main>
+</body>
+</html>
