@@ -1,0 +1,31 @@
+# .gitignore - Archivos a ignorar en el repositorio
+
+# --- DATOS (Prohibido subir según la guía) ---
+datos/
+*.csv
+*.parquet
+*.db
+
+# --- ENTORNOS VIRTUALES (Nunca subir) ---
+.venv/
+venv/
+env/
+
+# --- IDE y SISTEMA (Configuraciones personales) ---
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# --- PYTHON (Archivos compilados y caché) ---
+__pycache__/
+*.pyc
+
+# --- DOCKER (Volúmenes de datos) ---
+postgres_data/
+spark-warehouse/
+metastore_db/
+derby.log
+
+# --- OTROS ---
+.env

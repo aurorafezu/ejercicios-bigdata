@@ -1,0 +1,10 @@
+# requirements.txt
+# Dependencias de Python para el proyecto
+
+# Librerías para el pipeline de datos con Spark
+pyspark==3.5.1
+
+# Librerías para análisis y visualización
+pandas
+matplotlib
+seaborn

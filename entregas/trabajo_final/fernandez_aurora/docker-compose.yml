@@ -1,0 +1,66 @@
+version: '3.8'
+
+networks:
+  qog_network:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_qog
+    environment:
+      - POSTGRES_USER=qog_user
+      - POSTGRES_PASSWORD=qog_pass
+      - POSTGRES_DB=qog_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qog_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - qog_network
+
+  spark-master:
+    image: apache/spark:3.5.1
+    container_name: spark-master
+    user: root
+    # COMANDO AÑADIDO: Para que sepa que es el Master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    environment:
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    volumes:
+      - ./:/opt/spark/work-dir
+    networks:
+      - qog_network
+
+  spark-worker:
+    image: apache/spark:3.5.1
+    container_name: spark-worker
+    user: root
+    # COMANDO AÑADIDO: Para que sepa que es el Worker y conecte al Master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    environment:
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    volumes:
+      - ./:/opt/spark/work-dir
+    depends_on:
+      - spark-master
+    networks:
+      - qog_network
+
+volumes:
+  postgres_data:
