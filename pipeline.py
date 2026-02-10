@@ -22,7 +22,7 @@ def main():
     """
     Función principal del pipeline ETL + Análisis + ML.
     """
-    print("--- INICIANDO PIPELINE 'SOBRESALIENTE' (Apache) ---")
+    print("--- INICIANDO PIPELINE COMPLETO (Apache) ---")
     
     spark = SparkSession.builder \
         .appName("QoG Magreb Analysis") \
@@ -63,14 +63,51 @@ def main():
     # --- BLOQUE C: ANÁLISIS Y VISUALIZACIÓN ---
     if VISUALIZATION_READY:
         print("\n--- INICIANDO ANÁLISIS Y VISUALIZACIÓN ---")
+        pdf = df_processed.toPandas()
         output_dir = "/opt/spark/work-dir/resultados"
         if not os.path.exists(output_dir): os.makedirs(output_dir)
         sns.set_theme(style="whitegrid")
         
+        # GRÁFICO 1: Evolución de la Democracia
+        plt.figure(figsize=(12, 6))
+        sns.lineplot(data=pdf, x="year", y="vdem_libdem", hue="cname", marker="o")
+        plt.title("Evolución de la Democracia en el Magreb (2000-2022)")
+        plt.ylabel("Índice de Democracia Liberal")
+        plt.axvline(x=2011, color='r', linestyle='--', alpha=0.5, label="Primavera Árabe")
+        plt.savefig(os.path.join(output_dir, "1_evolucion_democracia.png"))
+        plt.close()
+        print("Gráfico 1 generado.")
+
+        # GRÁFICO 2: PIB vs Democracia
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(data=pdf, x="gle_cgdpc", y="vdem_libdem", hue="cname", size="year", sizes=(20, 200), alpha=0.7)
+        plt.title("Relación Riqueza (PIB) vs Democracia")
+        plt.savefig(os.path.join(output_dir, "2_pib_vs_democracia.png"))
+        plt.close()
+        print("Gráfico 2 generado.")
+
+        # GRÁFICO 3: Matriz de Correlación
+        plt.figure(figsize=(8, 6))
+        cols_corr = ["vdem_libdem", "gle_cgdpc", "ti_cpi", "wdi_lifexp"]
+        cols_corr_existentes = [c for c in cols_corr if c in pdf.columns]
+        if len(cols_corr_existentes) > 1:
+            sns.heatmap(pdf[cols_corr_existentes].corr(), annot=True, cmap='coolwarm', vmin=-1, vmax=1)
+            plt.title("Matriz de Correlación")
+            plt.savefig(os.path.join(output_dir, "3_correlacion_variables.png"))
+            plt.close()
+            print("Gráfico 3 generado.")
+
+        # GRÁFICO 4: Impacto Primavera Árabe
+        plt.figure(figsize=(10, 6))
+        sns.barplot(data=pdf, x="cname", y="vdem_libdem", hue="periodo_historico", errorbar=None, palette="muted")
+        plt.title("Democracia: Pre vs Post Primavera Árabe")
+        plt.savefig(os.path.join(output_dir, "4_impacto_primavera_arabe.png"))
+        plt.close()
+        print("Gráfico 4 generado.")
+
         # --- ANÁLISIS DE CLUSTERING (K-MEANS) ---
         print("\n--- INICIANDO ANÁLISIS DE CLUSTERING K-MEANS ---")
         
-        # CORRECCIÓN: Usamos solo las 2 variables principales para el clustering para evitar problemas con nulos.
         cluster_cols = ["vdem_libdem", "gle_cgdpc"]
         df_ml = df_processed.select(cluster_cols + ["cname", "year"]).dropna()
 
@@ -91,16 +128,12 @@ def main():
             plt.figure(figsize=(12, 7))
             sns.scatterplot(data=pdf_clustered, x="vdem_libdem", y="gle_cgdpc", hue="cname", style="prediction", palette="viridis", s=150, alpha=0.8)
             plt.title("Clustering de Países del Magreb (K-Means)")
-            plt.xlabel("Índice de Democracia Liberal")
-            plt.ylabel("PIB per cápita (USD)")
-            plt.legend(title="País / Cluster", bbox_to_anchor=(1.05, 1), loc='upper left')
-            plt.tight_layout()
             plt.savefig(os.path.join(output_dir, "5_clustering_paises.png"))
             plt.close()
 
-            print(f"¡Gráfico de Clustering generado exitosamente en {output_dir}!")
+            print(f"¡Gráfico 5 (Clustering) generado!")
         else:
-            print("No hay suficientes datos para el análisis de clustering después de eliminar nulos.")
+            print("No hay suficientes datos para el análisis de clustering.")
         
     else:
         print("\nSaltando visualización: Librerías no instaladas.")
